@@ -143,7 +143,7 @@ const ProductCreateForm = ({
                     style={{width: '100%'}}
                     placeholder="Please select"
                     value={subs}
-                    onChange={value => setValues({...values, subs: value})}
+                    onChange={(value) => setValues({...values, subs: value})}
                 >
                     {subOptions.length && 
                         subOptions.map((s) => (

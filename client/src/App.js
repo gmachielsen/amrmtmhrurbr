@@ -40,6 +40,7 @@ import TechniqueUpdate from "./pages/admin/technique/TechniqueUpdate";
 import ProductCreate from "./pages/admin/product/ProductCreate";
 import AllProducts from "./pages/admin/product/AllProducts";
 import ProductUpdate from "./pages/admin/product/ProductUpdate";
+import Product from "./pages/Product";
 
 
 import {auth} from './firebase';
@@ -89,6 +90,7 @@ useEffect(() => {
         <Route exact path="/register/complete" component={RegisterComplete} />
         <Route exact path="/register-as-seller/complete" component={RegisterSellerComplete} />
         <Route exact path="/forgot/password" component={ForgotPassword} />
+
         <UserRoute exact path="/user/history" component={History} />
         <UserRoute exact path="/user/password" component={Password} />
         <UserRoute exact path="/user/wishlist" component={Wishlist} />
@@ -109,7 +111,8 @@ useEffect(() => {
         <AdminRoute exact path="/admin/technique/:slug" component={TechniqueUpdate} />
 
         <SellerRoute exact path="/seller/dashboard" component={SellerDashboard} />
-        
+        <Route exact path="/artwork/:slug" component={Product} />
+
       </Switch>
     </>
   );

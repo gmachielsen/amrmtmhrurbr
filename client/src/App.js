@@ -41,6 +41,8 @@ import ProductCreate from "./pages/admin/product/ProductCreate";
 import AllProducts from "./pages/admin/product/AllProducts";
 import ProductUpdate from "./pages/admin/product/ProductUpdate";
 import Product from "./pages/Product";
+import CategoryHome from "./pages/category/CategoryHome";
+import SubHome from "./pages/subs/SubHome";
 
 
 import {auth} from './firebase';
@@ -112,6 +114,8 @@ useEffect(() => {
 
         <SellerRoute exact path="/seller/dashboard" component={SellerDashboard} />
         <Route exact path="/artwork/:slug" component={Product} />
+        <Route exact path="/category/:slug" component={CategoryHome} />
+        <Route exact path="/sub/:slug" component={SubHome} />
 
       </Switch>
     </>

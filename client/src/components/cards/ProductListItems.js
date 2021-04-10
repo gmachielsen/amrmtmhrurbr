@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import { showAvarage } from "../../functions/rating";
 
 
 const ProductListItems = ({ product }) => {
@@ -64,35 +65,18 @@ const ProductListItems = ({ product }) => {
                 </span>
             </li>
             <li className="list-group-item">
-                Prijs {" "}
+                Waardering {" "}
                 <span className="label label-default label-pill pull-xs-right">
-                    € {price}
+                    {product && product.ratings && product.ratings.length > 0
+                        ? showAvarage(product)
+                        : "Nog geen waardering voor dit kunstwerk achtergelaten"
+                    }
                 </span>
             </li>
-            <li className="list-group-item">
-                Prijs {" "}
-                <span className="label label-default label-pill pull-xs-right">
-                    € {price}
-                </span>
-            </li>
-            <li className="list-group-item">
-                Prijs {" "}
-                <span className="label label-default label-pill pull-xs-right">
-                    € {price}
-                </span>
-            </li>
-            <li className="list-group-item">
-                Prijs {" "}
-                <span className="label label-default label-pill pull-xs-right">
-                    € {price}
-                </span>
-            </li>
-            <li className="list-group-item">
-                Prijs {" "}
-                <span className="label label-default label-pill pull-xs-right">
-                    € {price}
-                </span>
-            </li>
+       
+        
+      
+ 
         </ul>
     );
 };

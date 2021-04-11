@@ -8,7 +8,7 @@ const { Meta } = Card;
 
 const ProductCard = ({ product }) => {
     // destructure 
-    const { images, title, description, slug  } = product;
+    const { images, title, description, slug, price  } = product;
     return (
         <Card>     
             <Link to={`/artwork/${slug}`}>            
@@ -19,6 +19,7 @@ const ProductCard = ({ product }) => {
             />
             <div>
                 <h1>{title}</h1>
+                <h2>€ {price}</h2>
             </div>
             </Link>     
         </Card>

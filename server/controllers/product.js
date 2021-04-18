@@ -24,6 +24,9 @@ exports.listAll = async (req, res) => {
     .populate("subs")
     .sort([["createdAt", "desc"]])
     .exec();
+
+    await new Promise(res => setTimeout(res, 1000));
+
   res.json(products);
 };
 
@@ -101,7 +104,8 @@ exports.list = async (req, res) => {
       .sort([[sort, order]])
       .limit(perPage)
       .exec();
-
+    
+    await new Promise(res => setTimeout(res, 1000));
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -198,18 +202,52 @@ const handlePrice = async (req, res, price) => {
   }
 };
 
+const handleCategory = async (req, res, category) => {
+  try {
+    let products = await Product.find({category})
+      .populate("category", "_id name")
+      .populate("subs", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
+    
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleShipping = async (req, res, shipping) => {
+  const products = await Product.find({ shipping })
+    .populate("category", "_id name")
+    .populate("subs", "_id name")
+    .populate("postedBy", "_id name")
+    .exec();
+
+  res.json(products);
+};
+
 exports.searchFilters = async (req, res) => {
-  const { query, price } = req.body;
+  const { query, price, category, shipping } = req.body;
 
   if (query) {
-    console.log("query", query);
+    console.log("query --->", query);
     await handleQuery(req, res, query);
   }
 
   // price [20, 200]
-  if(price !== undefined) {
-    console.log('price --->', price)
-    await handlePrice(req, res, price)
+  if (price !== undefined) {
+    console.log("price ---> ", price);
+    await handlePrice(req, res, price);
+  }
+
+  if (category) {
+    console.log("category ---> ", category);
+    await handleCategory(req, res, category);
+  }
+
+  if (shipping) {
+    console.log("shipping ---> ", shipping);
+    await handleShipping(req, res, shipping);
   }
 };
 

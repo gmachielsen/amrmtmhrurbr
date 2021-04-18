@@ -15,6 +15,7 @@ exports.create = async (req, res) => {
 };
 
 exports.list = async (req, res) => {
+    await new Promise(res => setTimeout(res, 1000));
     res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
 };
 
@@ -22,7 +23,8 @@ exports.read = async (req, res) => {
     let category = await Category.findOne({ slug: req.params.slug }).exec();
     // res.json(category);
     const products = await Product.find({ category }).populate("category").exec();
-  
+    
+    await new Promise(res => setTimeout(res, 1000));
     res.json({
       category,
       products,

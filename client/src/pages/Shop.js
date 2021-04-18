@@ -3,10 +3,11 @@ import {
   getProductsByCount,
   fetchProductsByFilter,
 } from "../functions/product";
+import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
-import { Menu, Slider } from "antd";
-import { EuroOutlined } from "@ant-design/icons";
+import { Menu, Slider, Checkbox } from "antd";
+import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -15,6 +16,9 @@ const Shop = () => {
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
   const [ok, setOk] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [categoryIds, setCategoryIds] = useState([]);
+  const [shipping, setShipping] = useState("");
 
   let dispatch = useDispatch();
   let { search } = useSelector((state) => ({ ...state }));
@@ -22,6 +26,8 @@ const Shop = () => {
 
   useEffect(() => {
     loadAllProducts();
+    // fetch categories
+    getCategories().then((res) => setCategories(res.data));
   }, []);
 
   const fetchProducts = (arg) => {
@@ -48,7 +54,7 @@ const Shop = () => {
 
   // 3. load products based on price range
   useEffect(() => {
-    console.log("ok to request");
+    console.log("ok to request", price);
     fetchProducts({ price });
   }, [ok]);
 
@@ -57,25 +63,104 @@ const Shop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
+    setCategoryIds([]);
+    setShipping("");
     setPrice(value);
     setTimeout(() => {
       setOk(!ok);
     }, 300);
   };
 
+  // 4. load products based on category
+  // show categories in a list of checkbox
+  const showCategories = () =>
+    categories.map((c) => (
+      <div key={c._id}>
+        <Checkbox
+          onChange={handleCheck}
+          className="pb-2 pl-4 pr-4"
+          value={c._id}
+          name="category"
+          checked={categoryIds.includes(c._id)}
+        >
+          {c.name}
+        </Checkbox>
+        <br />
+      </div>
+    ));
+
+  // handle check for categories
+  const handleCheck = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setShipping("");
+
+    // console.log(e.target.value);
+    let inTheState = [...categoryIds];
+    let justChecked = e.target.value;
+    let foundInTheState = inTheState.indexOf(justChecked); // index or -1
+
+    // indexOf method ?? if not found returns -1 else return index [1,2,3,4,5]
+    if (foundInTheState === -1) {
+      inTheState.push(justChecked);
+    } else {
+      // if found pull out one item from index
+      inTheState.splice(foundInTheState, 1);
+    }
+
+    setCategoryIds(inTheState);
+    console.log(inTheState);
+    fetchProducts({ category: inTheState });
+  };
+
+  // show products based on shipping yes/no
+  const showShipping = () => (
+    <>
+      <Checkbox 
+        className="pb-2 pl-4 pr-4" 
+        onChange={handleShippingchange} 
+        value="Yes"
+        checked={shipping === "Yes" } 
+      > Yes 
+      </Checkbox>
+      <Checkbox 
+        className="pb-2 pl-4 pr-4" 
+        onChange={handleShippingchange} 
+        value="No"
+        checked={shipping === "No" } 
+      > No 
+      </Checkbox>
+    </>
+  );
+
+  const handleShippingchange = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([])
+    setShipping(e.target.value);
+    fetchProducts({ shipping: e.target.value });
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-3 pt-2">
-          <h4 className="text-center">Zoekfilter</h4>
+          <h4 className="text-center" >Zoekfilter</h4>
           <hr />
 
           <Menu defaultOpenKeys={["1", "2"]} mode="inline">
+            {/* price */}
             <SubMenu
               key="1"
               title={
                 <span className="h6">
-                  <EuroOutlined /> Prijs
+                  <DollarOutlined /> Price
                 </span>
               }
             >
@@ -86,8 +171,34 @@ const Shop = () => {
                   range
                   value={price}
                   onChange={handleSlider}
-                  max="100000"
+                  max="10000"
                 />
+              </div>
+            </SubMenu>
+
+            {/* category */}
+            <SubMenu
+              key="2"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Categories
+                </span>
+              }
+            >
+              <div style={{ maringTop: "-10px" }}>{showCategories()}</div>
+            </SubMenu>
+
+            {/* shipping */}
+            <SubMenu
+              key="7"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Shipping
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }} className="pr-5">
+                {showShipping()}
               </div>
             </SubMenu>
           </Menu>
@@ -97,7 +208,7 @@ const Shop = () => {
           {loading ? (
             <h4 className="text-danger">Loading...</h4>
           ) : (
-            <h4 className="text-danger">Kunstobjecten</h4>
+            <h4 className="text-danger">Products</h4>
           )}
 
           {products.length < 1 && <p>No products found</p>}

@@ -44,6 +44,7 @@ import Product from "./pages/Product";
 import CategoryHome from "./pages/category/CategoryHome";
 import SubHome from "./pages/subs/SubHome";
 import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
 
 
 import {auth} from './firebase';
@@ -118,7 +119,7 @@ useEffect(() => {
         <Route exact path="/category/:slug" component={CategoryHome} />
         <Route exact path="/sub/:slug" component={SubHome} />
         <Route exact path="/shop" component={Shop} />
-
+        <Route exact path="/cart" component={Cart} />
       </Switch>
     </>
   );

@@ -25,7 +25,7 @@ exports.listAll = async (req, res) => {
     .sort([["createdAt", "desc"]])
     .exec();
 
-    await new Promise(res => setTimeout(res, 1000));
+    await new Promise(res => setTimeout(res, 500));
 
   res.json(products);
 };
@@ -105,7 +105,7 @@ exports.list = async (req, res) => {
       .limit(perPage)
       .exec();
     
-    await new Promise(res => setTimeout(res, 1000));
+    await new Promise(res => setTimeout(res, 500));
     res.json(products);
   } catch (err) {
     console.log(err);

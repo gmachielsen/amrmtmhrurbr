@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { Card } from 'antd';
 import { EyeOutlined, ShoppingCardOutlined } from '@ant-design/icons';
 import schilderij from "../../images/mooi.jpeg";

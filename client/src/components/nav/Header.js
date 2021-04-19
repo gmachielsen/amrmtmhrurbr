@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {Menu} from 'antd';
-import { SettingOutlined, AppstoreOutlined, UserOutlined, UserAddOutlined, LogoutOutlined, ShopOutlined } from '@ant-design/icons';
+import { Menu, Badge}  from 'antd';
+import { SettingOutlined, AppstoreOutlined, UserOutlined, UserAddOutlined, ShoppingCartOutlined, LogoutOutlined, ShopOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import firebase from 'firebase';
-import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Search from "../forms/Search";
 
 const { SubMenu, Item } = Menu; // Menu
@@ -12,7 +12,7 @@ const { SubMenu, Item } = Menu; // Menu
 const Header = () => {
     const [current, setCurrent] = useState("home");
     let dispatch = useDispatch();
-    let {user} = useSelector((state) => ({ ...state }));
+    let { user, cart } = useSelector((state) => ({ ...state }));
     let history = useHistory();
 
     const handleClick = (e) => {
@@ -37,6 +37,15 @@ const Header = () => {
 
         <Item key="shop" icon={<ShopOutlined />}>
           <Link to="/shop">Shop</Link>
+        </Item>
+
+
+        <Item key="cart" icon={<ShoppingCartOutlined />}>
+          <Link to="/cart">
+            <Badge count={cart.length} offset={[9, 0]}>
+              Cart
+            </Badge>
+          </Link>
         </Item>
 
         {!user && (

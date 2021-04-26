@@ -12,6 +12,8 @@ const {
     removeFromWishlist
 } = require("../controllers/user");
 
+// controllers
+const { userCart, getUserCart, emptyCart } = require("../controllers/user");
 // router.get("/user", (req, res) => {
 //     res.json({
 //         data: "hey you hit user API endpoint",
@@ -22,5 +24,9 @@ const {
 router.post("/user/wishlist", authCheck, addToWishlist);
 router.get("/user/wishlist", authCheck, wishlist);
 router.put("/user/wishlist/:productId", authCheck, removeFromWishlist);
+
+router.post("/user/cart", authCheck, userCart); // save cart
+router.get("/user/cart", authCheck, getUserCart); // get cart
+router.put("/user/cart", authCheck, emptyCart);
 
 module.exports = router;

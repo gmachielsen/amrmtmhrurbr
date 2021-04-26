@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { Menu, Slider, Checkbox } from "antd";
 import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
+import Search from "../components/forms/Search";
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -155,9 +156,21 @@ const Shop = () => {
           <hr />
 
           <Menu defaultOpenKeys={["1", "2"]} mode="inline">
+          <SubMenu
+              key="1"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Search
+                </span>
+              }
+            >
+              <div className="col-12">
+                <Search />
+              </div>
+            </SubMenu>
             {/* price */}
             <SubMenu
-              key="1"
+              key="2"
               title={
                 <span className="h6">
                   <DollarOutlined /> Price
@@ -178,7 +191,7 @@ const Shop = () => {
 
             {/* category */}
             <SubMenu
-              key="2"
+              key="3"
               title={
                 <span className="h6">
                   <DownSquareOutlined /> Categories
@@ -190,7 +203,7 @@ const Shop = () => {
 
             {/* shipping */}
             <SubMenu
-              key="7"
+              key="4"
               title={
                 <span className="h6">
                   <DownSquareOutlined /> Shipping
@@ -208,10 +221,10 @@ const Shop = () => {
           {loading ? (
             <h4 className="text-danger">Loading...</h4>
           ) : (
-            <h4 className="text-danger">Products</h4>
+            <h4 className="text-danger text-center">Kunstwerken</h4>
           )}
 
-          {products.length < 1 && <p>No products found</p>}
+          {products.length < 1 && <p>Geen kunstobjecten gevonden</p>}
 
           <div className="row pb-5">
             {products.map((p) => (

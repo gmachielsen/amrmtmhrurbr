@@ -13,7 +13,7 @@ const {
 } = require("../controllers/user");
 
 // controllers
-const { userCart, getUserCart, emptyCart } = require("../controllers/user");
+const { userCart, getUserCart, emptyCart, saveAddress, createOrder } = require("../controllers/user");
 // router.get("/user", (req, res) => {
 //     res.json({
 //         data: "hey you hit user API endpoint",
@@ -27,6 +27,9 @@ router.put("/user/wishlist/:productId", authCheck, removeFromWishlist);
 
 router.post("/user/cart", authCheck, userCart); // save cart
 router.get("/user/cart", authCheck, getUserCart); // get cart
-router.put("/user/cart", authCheck, emptyCart);
+router.delete("/user/cart", authCheck, emptyCart);
+router.post("/user/address", authCheck, saveAddress);
+
+router.post("/user/order", authCheck, createOrder);
 
 module.exports = router;

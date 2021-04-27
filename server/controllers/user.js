@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Product = require("../models/product");
 const Cart = require("../models/cart");
+const Order = require('../models/order');
 
 
 exports.userCart = async (req, res) => {
@@ -26,8 +27,8 @@ exports.userCart = async (req, res) => {
     object.count = cart[i].count;
     object.color = cart[i].color;
     // get price for creating total
-    let { price } = await Product.findById(cart[i]._id).select("price").exec();
-    object.price = price;
+    let productFromDb = await Product.findById(cart[i]._id).select("price").exec();
+    object.price = productFromDb.price;
 
     products.push(object);
   }
@@ -98,4 +99,30 @@ exports.addToWishlist = async (req, res) => {
 
     const cart = await Cart.findOneAndRemove({ orderBy: user._id }).exec();
     res.json(cart);
+  };
+
+
+  exports.saveAddress = async (req, res) => {
+    const userAddress = await User.findOneAndUpdate(
+      { email: req.user.email },
+      { address: req.body.address }
+    ).exec();
+
+    res.json({ ok: true });
+  }
+
+
+  exports.createOrder = async (req, res) => {
+    const { paymentIntent } = req.body.stripeResponse;
+    const user = await User.findOne({ email: req.user.email }).exec();
+
+    let { products } = await Cart.findOne({ orderBy: user._id }).exec();
+
+    let newOrder = await new Order({
+      products,
+      paymentIntent,
+      orderBy: user._id,
+    }).save();
+    console.log("NEW ORDER SAVED", newOrder);
+    res.json({ ok: true });
   };

@@ -173,6 +173,20 @@ exports.listRelated = async (req, res) => {
 
 // SEARCH / FILTER
 
+const handleFilter = async (req, res, values) => {
+  const products = await Product.find({ price: {
+    $gte: price[0],
+    $lte: price[1],
+  }, category})
+  .populate("category", "_id name")
+  .populate("subs", "_id name")
+  .populate("postedBy", "_id name")
+  .exec();
+
+  res.json(products);
+};
+////
+
 const handleQuery = async (req, res, query) => {
   const products = await Product.find({ $text: { $search: query }})
     .populate("category", "_id name")
@@ -226,22 +240,94 @@ const handleShipping = async (req, res, shipping) => {
   res.json(products);
 };
 
+
+
 exports.searchFilters = async (req, res) => {
+  // try {
+  //     const { query, price, category, shipping } = req.body;
+  //     if (price !== undefined, category, shipping ) {
+  //       console.log(price, shipping, category);
+  //     const products = await Product.find({ price: {
+  //       $gte: price[0],
+  //       $lte: price[1],
+  //     }, category, shipping})
+  //     .populate("category", "_id name")
+  //     .populate("subs", "_id name")
+  //     .populate("postedBy", "_id name")
+  //     .exec();
+  //     res.json(products);
+
+  //     console.log(products, "<<--producte?? ")
+  //     console.log(products.length, "<<--- lengte")
+  //     } 
+  //     // console.log(products.length, "<<<-__ lengte")
+
+
+  // } catch(err) {
+  //   console.log(err);
+  // }
+
+
+
+
+  // ---------------------------------------
   const { query, price, category, shipping } = req.body;
+  
+  //   const searchValues = [];
+  //   searchValues.push(query, price, category, shipping);
+  //   const values = Object.assign(searchValues);
+
+  // const searchValueQuery = query;
+  // const searchValueShipping = shipping;
+
+  //   if (price !== undefined) {
+  //     // let searchValuePrice = price;
+  //     // console.log(searchValuePrice);
+  //     console.log(price, "<<+++ de riosho f");
+  //   } 
+  //     searchValues.push(price);
+
+  //   if (category) {
+  //     let searchValueCategory = category; 
+  //     console.log(searchValueCategory);
+  //   }
+  //   searchValues.push(category);
+
+  //   console.log(searchValues, "<<-- staat er iets????");
+
+  // const { query, price, category, shipping } = req.body;
+
+  // if (query || price !== undefined || category || shipping ) {
+  //   searchValues.push(query || price || category || shipping);
+  //   console.log(searchValues, "<<------ searchvalues");
+  // }
+
+  // if (query) {
+  //   searchValues.push(query);
+  //   console.log(searchValues, "<<------ searchvalues");
+  // } else if (price !=== ) {
+
+  // }
 
   if (query) {
-    console.log("query --->", query);
+
+    console.log(searchValues, "<<------ searchvalues");
     await handleQuery(req, res, query);
   }
 
-  // price [20, 200]
+  // // price [20, 200]
   if (price !== undefined) {
+
     console.log("price ---> ", price);
+
+
+
     await handlePrice(req, res, price);
   }
 
   if (category) {
     console.log("category ---> ", category);
+
     await handleCategory(req, res, category);
   }
 

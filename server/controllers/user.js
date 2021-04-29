@@ -1,8 +1,7 @@
 const User = require('../models/user');
 const Product = require("../models/product");
 const Cart = require("../models/cart");
-const Order = require('../models/order');
-
+const Order = require("../models/order");
 
 exports.userCart = async (req, res) => {
   // console.log(req.body); // {cart: []}
@@ -95,9 +94,10 @@ exports.addToWishlist = async (req, res) => {
   };
 
   exports.emptyCart = async (req, res) => {
+    console.log("empty cart");
     const user = await User.findOne({ email: req.user.email }).exec();
-
-    const cart = await Cart.findOneAndRemove({ orderBy: user._id }).exec();
+  
+    const cart = await Cart.findOneAndRemove({ orderdBy: user._id }).exec();
     res.json(cart);
   };
 
@@ -113,16 +113,44 @@ exports.addToWishlist = async (req, res) => {
 
 
   exports.createOrder = async (req, res) => {
+    // console.log(req.body);
+    // return;
     const { paymentIntent } = req.body.stripeResponse;
+  
     const user = await User.findOne({ email: req.user.email }).exec();
-
-    let { products } = await Cart.findOne({ orderBy: user._id }).exec();
-
+  
+    let { products } = await Cart.findOne({ orderdBy: user._id }).exec();
+  
     let newOrder = await new Order({
       products,
       paymentIntent,
-      orderBy: user._id,
+      orderdBy: user._id,
     }).save();
+  
+    // decrement quantity, increment sold
+    let bulkOption = products.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.product._id }, // IMPORTANT item.product
+          update: { $inc: { quantity: -item.count, sold: +item.count } },
+        },
+      };
+    });
+  
+    let updated = await Product.bulkWrite(bulkOption, {});
+    console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+  
     console.log("NEW ORDER SAVED", newOrder);
     res.json({ ok: true });
+  };
+
+
+  exports.orders = async (req, res) => {
+    let user = await User.findOne({ email: req.user.email }).exec();
+  
+    let userOrders = await Order.find({ orderdBy: user._id })
+      .populate("products.product")
+      .exec();
+  
+    res.json(userOrders);
   };

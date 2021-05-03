@@ -5,6 +5,7 @@ import {
   getUserCart,
   emptyUserCart,
   saveUserAddress,
+  createCashOrderForUser,
   // applyCoupon,
 } from "../functions/user";
 import ReactQuill from "react-quill";
@@ -21,7 +22,7 @@ const Checkout = ({ history }) => {
   const [discountError, setDiscountError] = useState("");
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, COD } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
     getUserCart(user.token).then((res) => {
@@ -84,6 +85,13 @@ const Checkout = ({ history }) => {
   //     }
   //   });
   // };
+
+  const createCashOrder = () => {
+    createCashOrderForUser(user.token).then(res => {
+      console.log("USER CASH ORDER CREATED", res);
+      // empty cart from redux, local storage, reset coupon, reset COD, redirect
+    });
+  };
 
   const showAddress = () => (
     <>
@@ -153,13 +161,24 @@ const Checkout = ({ history }) => {
 
         <div className="row">
           <div className="col-md-6">
+            {COD ? (
+              <button
+                className="btn btn-primary"
+                disabled={!addressSaved || !products.length}
+                onClick={(createCashOrder) => history.push("/payment")}
+              >
+                Place Order
+              </button>
+
+            ) : (
             <button
-              className="btn btn-primary"
-              disabled={!addressSaved || !products.length}
-              onClick={() => history.push("/payment")}
+            className="btn btn-primary"
+            disabled={!addressSaved || !products.length}
+            onClick={() => history.push("/payment")}
             >
-              Place Order
-            </button>
+            Place Order
+          </button>
+          )}
           </div>
 
           <div className="col-md-6">

@@ -243,8 +243,29 @@ const handleShipping = async (req, res, shipping) => {
 
 
 exports.searchFilters = async (req, res) => {
+
+
+  try {
+      const query = req.body.query;
+      const products = await Product.find(query)
+      .populate("category", "_id name")
+      .populate("subs", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
+      res.json(products);
+
+      console.log(products, "<<--producte?? ")
+      console.log(products.length, "<<--- lengte")
+      
+      // console.log(products.length, "<<<-__ lengte")
+  } catch(err) {
+    console.log(err);
+  }
+
+
+
   // try {
-  //     const { query, price, category, shipping } = req.body;
+  //     const { price, category, shipping } = req.body;
   //     if (price !== undefined, category, shipping ) {
   //       console.log(price, shipping, category);
   //     const products = await Product.find({ price: {

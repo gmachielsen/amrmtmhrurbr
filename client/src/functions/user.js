@@ -75,14 +75,20 @@ export const getUserOrders = async (authtoken) =>
       },
     });
 
-export const createCashOrderForUser = async (authtoken) => 
-    await axios.post(
-      `${process.env.REACT_APP_API}/user/cash-order`,
-      {},
-      {
-        headers: {
-          authtoken,
-        },
-      }
-    );
+    export const createCashOrderForUser = async (
+      authtoken,
+      COD,
+      couponTrueOrFalse
+    ) =>
+      await axios.post(
+        `${process.env.REACT_APP_API}/user/cash-order`,
+        { COD },
+        // { couponApplied: couponTrueOrFalse, COD },
+        {
+          headers: {
+            authtoken,
+          },
+        }
+      );
+    
   

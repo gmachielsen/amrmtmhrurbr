@@ -25,6 +25,8 @@ mongoose.connect(process.env.DATABASE, {
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+
 
 
 // routes middleware 

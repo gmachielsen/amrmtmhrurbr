@@ -6,7 +6,6 @@ import {
   emptyUserCart,
   saveUserAddress,
   createCashOrderForUser,
-  // applyCoupon,
 } from "../functions/user";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -16,13 +15,14 @@ const Checkout = ({ history }) => {
   const [total, setTotal] = useState(0);
   const [address, setAddress] = useState("");
   const [addressSaved, setAddressSaved] = useState(false);
-  // const [coupon, setCoupon] = useState("");
+  const [coupon, setCoupon] = useState("");
   // discount price
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState("");
 
   const dispatch = useDispatch();
   const { user, COD } = useSelector((state) => ({ ...state }));
+  const couponTrueOrFalse = useSelector((state) => state.coupon);
 
   useEffect(() => {
     getUserCart(user.token).then((res) => {
@@ -47,7 +47,7 @@ const Checkout = ({ history }) => {
       setProducts([]);
       setTotal(0);
       setTotalAfterDiscount(0);
-      // setCoupon("");
+      setCoupon("");
       toast.success("Cart is emapty. Contniue shopping.");
     });
   };
@@ -86,13 +86,6 @@ const Checkout = ({ history }) => {
   //   });
   // };
 
-  const createCashOrder = () => {
-    createCashOrderForUser(user.token).then(res => {
-      console.log("USER CASH ORDER CREATED", res);
-      // empty cart from redux, local storage, reset coupon, reset COD, redirect
-    });
-  };
-
   const showAddress = () => (
     <>
       <ReactQuill theme="snow" value={address} onChange={setAddress} />
@@ -129,6 +122,39 @@ const Checkout = ({ history }) => {
   //   </>
   // );
 
+  const createCashOrder = () => {
+    createCashOrderForUser(user.token, COD).then((res) => {
+    // createCashOrderForUser(user.token, COD, couponTrueOrFalse).then((res) => {
+      console.log("USER CASH ORDER CREATED RES ", res);
+      // empty cart form redux, local Storage, reset coupon, reset COD, redirect
+      if (res.data.ok) {
+        // empty local storage
+        if (typeof window !== "undefined") localStorage.removeItem("cart");
+        // empty redux cart
+        dispatch({
+          type: "ADD_TO_CART",
+          payload: [],
+        });
+        // empty redux coupon
+        // dispatch({
+        //   type: "COUPON_APPLIED",
+        //   payload: false,
+        // });
+        // empty redux COD
+        dispatch({
+          type: "COD",
+          payload: false,
+        });
+        // mepty cart from backend
+        emptyUserCart(user.token);
+        // redirect
+        setTimeout(() => {
+          history.push("/user/history");
+        }, 1000);
+      }
+    });
+  };
+
   return (
     <div className="row">
       <div className="col-md-6">
@@ -137,11 +163,11 @@ const Checkout = ({ history }) => {
         <br />
         {showAddress()}
         <hr />
-        {/* <h4>Got Coupon?</h4>
+        <h4>Got Coupon?</h4>
         <br />
-        {showApplyCoupon()}
+        {/* {showApplyCoupon()} */}
         <br />
-        {discountError && <p className="bg-danger p-2">{discountError}</p>} */}
+        {discountError && <p className="bg-danger p-2">{discountError}</p>}
       </div>
 
       <div className="col-md-6">
@@ -153,11 +179,11 @@ const Checkout = ({ history }) => {
         <hr />
         <p>Cart Total: {total}</p>
 
-        {/* {totalAfterDiscount > 0 && (
+        {totalAfterDiscount > 0 && (
           <p className="bg-success p-2">
             Discount Applied: Total Payable: ${totalAfterDiscount}
           </p>
-        )} */}
+        )}
 
         <div className="row">
           <div className="col-md-6">
@@ -165,20 +191,19 @@ const Checkout = ({ history }) => {
               <button
                 className="btn btn-primary"
                 disabled={!addressSaved || !products.length}
-                onClick={(createCashOrder) => history.push("/payment")}
+                onClick={createCashOrder}
               >
                 Place Order
               </button>
-
             ) : (
-            <button
-            className="btn btn-primary"
-            disabled={!addressSaved || !products.length}
-            onClick={() => history.push("/payment")}
-            >
-            Place Order
-          </button>
-          )}
+              <button
+                className="btn btn-primary"
+                disabled={!addressSaved || !products.length}
+                onClick={() => history.push("/payment")}
+              >
+                Place Order
+              </button>
+            )}
           </div>
 
           <div className="col-md-6">

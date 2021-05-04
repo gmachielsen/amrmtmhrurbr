@@ -45,7 +45,7 @@ const Cart = ({ history }) => {
           <th scope="col">Image</th>
           <th scope="col">Title</th>
           <th scope="col">Price</th>
-          <th scope="col">Kunstenaar</th>
+          <th scope="col">Brand</th>
           <th scope="col">Count</th>
           <th scope="col">Shipping</th>
           <th scope="col">Remove</th>
@@ -101,7 +101,7 @@ const Cart = ({ history }) => {
                 className="btn btn-sm btn-warning mt-2"
                 disabled={!cart.length}
               >
-                Betaal per bezorging
+                Pay Cash on Delivery
               </button>
             </>
           ) : (

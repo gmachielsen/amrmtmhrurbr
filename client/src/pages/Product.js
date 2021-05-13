@@ -4,6 +4,7 @@ import SingleProduct from "../components/cards/SingleProduct";
 import { useSelector } from "react-redux";
 import { getRelated } from "../functions/product";
 import ProductCard from "../components/cards/ProductCard";
+import Footer from "../components/footer/Footer";
 
 const Product = ({ match }) => {
   const [product, setProduct] = useState({});
@@ -45,8 +46,11 @@ const Product = ({ match }) => {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row pt-4">
+    <div className="container-fluid" style={{ padding: "0"}}>
+    {/* // <div className="container-fluid"> */}
+      <div className="row pt-4" style={{ padding: "15px" }}>
+
+      {/* // <div className="row pt-4"> */}
         <SingleProduct
           product={product}
           onStarClick={onStarClick}
@@ -54,7 +58,7 @@ const Product = ({ match }) => {
         />
       </div>
 
-      <div className="row">
+      <div className="row" style={{ padding: "15px" }}>
         <div className="col text-center pt-5 pb-5">
           <hr />
           <h4>Related Products</h4>
@@ -62,7 +66,7 @@ const Product = ({ match }) => {
         </div>
       </div>
 
-      <div className="row pb-5">
+      <div className="row pb-5" style={{ padding: "15px" }}>
         {related.length ? (
           related.map((r) => (
             <div key={r._id} className="col-md-4">
@@ -73,6 +77,7 @@ const Product = ({ match }) => {
           <div className="text-center col">No Products Found</div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

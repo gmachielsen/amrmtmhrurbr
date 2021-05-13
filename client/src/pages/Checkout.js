@@ -9,6 +9,7 @@ import {
 } from "../functions/user";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Footer from "../components/footer/Footer";
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -156,67 +157,70 @@ const Checkout = ({ history }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <h4>Delivery Address</h4>
-        <br />
-        <br />
-        {showAddress()}
-        <hr />
-        <h4>Got Coupon?</h4>
-        <br />
-        {/* {showApplyCoupon()} */}
-        <br />
-        {discountError && <p className="bg-danger p-2">{discountError}</p>}
-      </div>
+    <div className="container-fluid" style={{ padding: "0"}}>
+      <div className="row" style={{ padding: "15px"}}>
+        <div className="col-md-6">
+          <h4>Delivery Address</h4>
+          <br />
+          <br />
+          {showAddress()}
+          <hr />
+          {/* <h4>Got Coupon?</h4> */}
+          <br />
+          {/* {showApplyCoupon()} */}
+          <br />
+          {discountError && <p className="bg-danger p-2">{discountError}</p>}
+        </div>
 
-      <div className="col-md-6">
-        <h4>Order Summary</h4>
-        <hr />
-        <p>Products {products.length}</p>
-        <hr />
-        {showProductSummary()}
-        <hr />
-        <p>Cart Total: {total}</p>
+        <div className="col-md-6">
+          <h4>Order Summary</h4>
+          <hr />
+          <p>Products {products.length}</p>
+          <hr />
+          {showProductSummary()}
+          <hr />
+          <p>Cart Total: {total}</p>
 
-        {totalAfterDiscount > 0 && (
-          <p className="bg-success p-2">
-            Discount Applied: Total Payable: ${totalAfterDiscount}
-          </p>
-        )}
+          {totalAfterDiscount > 0 && (
+            <p className="bg-success p-2">
+              Discount Applied: Total Payable: ${totalAfterDiscount}
+            </p>
+          )}
 
-        <div className="row">
-          <div className="col-md-6">
-            {COD ? (
+          <div className="row">
+            <div className="col-md-6">
+              {COD ? (
+                <button
+                  className="btn btn-primary"
+                  disabled={!addressSaved || !products.length}
+                  onClick={createCashOrder}
+                >
+                  Place Order
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  disabled={!addressSaved || !products.length}
+                  onClick={() => history.push("/payment")}
+                >
+                  Place Order
+                </button>
+              )}
+            </div>
+
+            <div className="col-md-6">
               <button
+                disabled={!products.length}
+                onClick={emptyCart}
                 className="btn btn-primary"
-                disabled={!addressSaved || !products.length}
-                onClick={createCashOrder}
               >
-                Place Order
+                Empty Cart
               </button>
-            ) : (
-              <button
-                className="btn btn-primary"
-                disabled={!addressSaved || !products.length}
-                onClick={() => history.push("/payment")}
-              >
-                Place Order
-              </button>
-            )}
-          </div>
-
-          <div className="col-md-6">
-            <button
-              disabled={!products.length}
-              onClick={emptyCart}
-              className="btn btn-primary"
-            >
-              Empty Cart
-            </button>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

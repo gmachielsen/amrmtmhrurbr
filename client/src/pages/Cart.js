@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCardInCheckout from "../components/cards/ProductCardInCheckout";
 import { userCart } from "../functions/user";
+import Footer from "../components/footer/Footer";
 
 const Cart = ({ history }) => {
   const { cart, user } = useSelector((state) => ({ ...state }));
@@ -59,8 +60,8 @@ const Cart = ({ history }) => {
   );
 
   return (
-    <div className="container-fluid pt-2">
-      <div className="row">
+    <div className="container-fluid pt-2" style={{padding: "0"}}>
+      <div className="row" style={{padding: "15px"}}>
         <div className="col-md-8">
           <h4>Cart / {cart.length} Product</h4>
 
@@ -118,7 +119,10 @@ const Cart = ({ history }) => {
           )}
         </div>
       </div>
+      <Footer />
+
     </div>
+
   );
 };
 

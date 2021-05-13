@@ -39,6 +39,10 @@ const Header = () => {
           <Link to="/shop">Shop</Link>
         </Item>
 
+        <Item key="gallery" icon={<ShopOutlined />}>
+          <Link to="/gallery">Gallery</Link>
+        </Item>
+
 
         <Item key="cart" icon={<ShoppingCartOutlined />}>
           <Link to="/cart">

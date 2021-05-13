@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
                 className=""
             />
             <div>
-                <h1>{title}</h1>
+                <h1 style={{ textAlign: "center"}}>{title}</h1>
                 <h2>€ {price}</h2>
             </div>
             </Link>     

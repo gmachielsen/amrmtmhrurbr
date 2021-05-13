@@ -8,6 +8,7 @@ import Register from './pages/auth/Register';
 import RegisterSeller from './pages/auth/RegisterSeller';
 import Home from './pages/Home';
 import Header from "./components/nav/Header";
+import Footer from "./components/footer/Footer";
 import RegisterComplete from "./pages/auth/RegisterComplete";
 import RegisterSellerComplete from "./pages/auth/RegisterSellerComplete";
 import ForgotPassword from "./pages/auth/ForgotPassword";
@@ -44,6 +45,7 @@ import Product from "./pages/Product";
 import CategoryHome from "./pages/category/CategoryHome";
 import SubHome from "./pages/subs/SubHome";
 import Shop from "./pages/Shop";
+import Gallery from "./pages/Gallery";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
@@ -120,11 +122,13 @@ useEffect(() => {
         <Route exact path="/category/:slug" component={CategoryHome} />
         <Route exact path="/sub/:slug" component={SubHome} />
         <Route exact path="/shop" component={Shop} />
+        <Route exact path="/gallery" component={Gallery} />
         <Route exact path="/cart" component={Cart} />
         <UserRoute exact path="/checkout" component={Checkout} />
         <UserRoute exact path="/payment" component={Payment} />
 
       </Switch>
+      {/* <Footer/> */}
     </>
   );
 };

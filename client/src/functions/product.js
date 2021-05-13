@@ -53,3 +53,11 @@ export const getRelated = async (productId) =>
 
 export const fetchProductsByFilter = async (arg) =>
   await axios.post(`${process.env.REACT_APP_API}/search/filters`, arg);
+
+
+export const getProductsByFilter = async (arg) =>
+  await axios.post(`${process.env.REACT_APP_API}/zoek/filters`, arg);
+
+// export const getProductsByFilter = async (categoryIds, price, shipping) =>
+//   await axios.post(`${process.env.REACT_APP_API}/zoek/filters`, categoryIds, price, shipping);
+

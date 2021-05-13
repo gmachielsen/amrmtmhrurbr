@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   getProductsByCount,
-  fetchProductsByFilter,
+  getProductsByFilter,
 } from "../functions/product";
 import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,7 +13,7 @@ import Footer from "../components/footer/Footer";
 
 const { SubMenu, ItemGroup } = Menu;
 
-const Shop = () => {
+const Gallery = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
@@ -22,9 +22,7 @@ const Shop = () => {
   const [categoryIds, setCategoryIds] = useState([]);
   const [shipping, setShipping] = useState("");
 
-  console.log(categoryIds, price, shipping, "<<---- categirues en prijs");
-
-
+  console.log(setShipping, setCategories, setPrice, "<<==== data");
 
   let dispatch = useDispatch();
   let { search } = useSelector((state) => ({ ...state }));
@@ -37,18 +35,10 @@ const Shop = () => {
   }, []);
 
   const fetchProducts = (arg) => {
-    console.log(arg, "<<------ arguments");
-    fetchProductsByFilter(arg).then((res) => {
+    getProductsByFilter(arg).then((res) => {
       setProducts(res.data);
     });
   };
-
-  // const fetchProducts = ({ shipping: shipping}) => {
-  //   console.log(arg, "<<------ arguments");
-  //   fetchProductsByFilter(arg).then((res) => {
-  //     setProducts(res.data);
-  //   });
-  // };
 
   // 1. load products by default on page load
   const loadAllProducts = () => {
@@ -72,7 +62,7 @@ const Shop = () => {
   // 3. load products based on price range
   useEffect(() => {
     console.log("ok to request", price);
-    fetchProducts({ price, shipping, categoryIds });
+    fetchProducts({ price });
   }, [ok]);
 
   const handleSlider = (value) => {
@@ -80,8 +70,8 @@ const Shop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
-    setCategoryIds(categoryIds);
-    setShipping(shipping);
+    setCategoryIds([]);
+    setShipping("");
     setPrice(value);
     setTimeout(() => {
       setOk(!ok);
@@ -112,8 +102,8 @@ const Shop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
-    // setPrice([0, 0]);
-    // setShipping("");
+    setPrice([0, 0]);
+    setShipping("");
 
     // console.log(e.target.value);
     let inTheState = [...categoryIds];
@@ -129,12 +119,8 @@ const Shop = () => {
     }
 
     setCategoryIds(inTheState);
-    setShipping(shipping);
-    setPrice(price);
-    // console.log(inTheState, "is piethe, daar");
-    // fetchProducts({ category: inTheState, shipping, price });
-    fetchProducts({ categoryIds: inTheState, shipping, price });
-
+    console.log(inTheState);
+    fetchProducts({ category: inTheState });
   };
 
   // show products based on shipping yes/no
@@ -157,17 +143,16 @@ const Shop = () => {
     </>
   );
 
-
   const handleShippingchange = (e) => {
     
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
-    setPrice(price);
-    setCategoryIds(categoryIds)
+    setPrice([0, 0]);
+    setCategoryIds([])
     setShipping(e.target.value);
-    fetchProducts({ shipping: e.target.value, price, categoryIds  });
+    fetchProducts({ shipping: e.target.value });
   };
 
   return (
@@ -178,63 +163,7 @@ const Shop = () => {
           <hr />
 
           <Menu defaultOpenKeys={["1", "2"]} mode="inline">
-          {/* <SubMenu
-              key="1"
-              title={
-                <span className="h6">
-                  <DownSquareOutlined /> Search
-                </span>
-              }
-            >
-              <div className="col-12">
-                <Search />
-              </div>
-            </SubMenu>
-            <SubMenu
-              key="2"
-              title={
-                <span className="h6">
-                  <DollarOutlined /> Price
-                </span>
-              }
-            >
-              <div>
-                <Slider
-                  className="ml-4 mr-4"
-                  tipFormatter={(v) => `$${v}`}
-                  range
-                  value={price}
-                  onChange={handleSlider}
-                  max="100000"
-                />
-              </div>
-            </SubMenu>
-
-            <SubMenu
-              key="3"
-              title={
-                <span className="h6">
-                  <DownSquareOutlined /> Categories
-                </span>
-              }
-            >
-              <div style={{ maringTop: "-10px" }}>{showCategories()}</div>
-            </SubMenu>
-
-            <SubMenu
-              key="4"
-              title={
-                <span className="h6">
-                  <DownSquareOutlined /> Shipping
-                </span>
-              }
-            >
-              <div style={{ marginTop: "-10px" }} className="pr-5">
-                {showShipping()}
-              </div>
-            </SubMenu> */}
-
-<SubMenu
+          <SubMenu
               key="1"
               title={
                 <span className="h6">
@@ -289,6 +218,8 @@ const Shop = () => {
                 {showShipping()}
               </div>
             </SubMenu>
+
+
           </Menu>
         </div>
 
@@ -316,4 +247,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default Gallery;

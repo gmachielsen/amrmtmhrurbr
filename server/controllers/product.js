@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const User = require("../models/user");
 const slugify = require("slugify");
+const e = require("express");
 
 exports.create = async (req, res) => {
   try {
@@ -240,27 +241,85 @@ const handleShipping = async (req, res, shipping) => {
   res.json(products);
 };
 
-
-
+// exports.zoekFilters = async (req, res) => {
 exports.searchFilters = async (req, res) => {
 
+    try {
+      // const { price, shipping, categories } = req.body;
+      const zoekopdracht = req.body;
 
-  try {
-      const query = req.body.query;
-      const products = await Product.find(query)
+      const categories = req.body.categoryIds;
+
+      const price = req.body.price;
+      const shipping = req.body.shipping;
+
+      console.log(price, "<<<------- prijs aangekomen in de bekend??? de filterdata");
+      console.log(categories, "<<--- categoruies <<<_----- aangekomen in backend???");
+      console.log(shipping, "<<---- shipping");
+
+      // console.log(zoekopdracht, "<<---- query");
+      // const products = await Product.find(price, shipping, categories);
+
+      // const products = await Product.find({
+      //   price: {
+      //     $gte: price[0],
+      //     $lte: price[1],
+      //   },
+      // })
+
+
+
+      // category: categories
+
+      // const products = await Product.find({
+      //   shipping: shipping
+      // })
+
+
+      // , category: {categories}, shipping: shipping
+      // const products = await Product.find({
+      //   price: {
+      //     $gte: price[0],
+      //     $lte: price[1],
+      //   }, category: categories, shipping: shipping})
+      const products = await Product.find({
+        price: {
+          $gte: price[0],
+          $lte: price[1],
+        }, category: categories, shipping: shipping})
       .populate("category", "_id name")
       .populate("subs", "_id name")
       .populate("postedBy", "_id name")
       .exec();
       res.json(products);
 
-      console.log(products, "<<--producte?? ")
+      // console.log(products, "<<--producte?? ")
       console.log(products.length, "<<--- lengte")
       
-      // console.log(products.length, "<<<-__ lengte")
   } catch(err) {
     console.log(err);
   }
+}
+
+// exports.searchFilters = async (req, res) => {
+
+
+  // try {
+  //     const zoekopdracht = req.body.zoekopdracht;
+  //     console.log(zoekopdracht, "<<---- query");
+  //     const products = await Product.find(zoekopdracht)
+  //     .populate("category", "_id name")
+  //     .populate("subs", "_id name")
+  //     .populate("postedBy", "_id name")
+  //     .exec();
+  //     res.json(products);
+
+  //     console.log(products, "<<--producte?? ")
+  //     console.log(products.length, "<<--- lengte")
+      
+  // } catch(err) {
+  //   console.log(err);
+  // }
 
 
 
@@ -292,7 +351,7 @@ exports.searchFilters = async (req, res) => {
 
 
   // ---------------------------------------
-  const { query, price, category, shipping } = req.body;
+  // const { query, price, category, shipping } = req.body;
   
   //   const searchValues = [];
   //   searchValues.push(query, price, category, shipping);
@@ -330,31 +389,45 @@ exports.searchFilters = async (req, res) => {
 
   // }
 
-  if (query) {
-
-    console.log(searchValues, "<<------ searchvalues");
-    await handleQuery(req, res, query);
-  }
-
-  // // price [20, 200]
-  if (price !== undefined) {
-
-    console.log("price ---> ", price);
 
 
 
-    await handlePrice(req, res, price);
-  }
 
-  if (category) {
-    console.log("category ---> ", category);
 
-    await handleCategory(req, res, category);
-  }
 
-  if (shipping) {
-    console.log("shipping ---> ", shipping);
-    await handleShipping(req, res, shipping);
-  }
-};
+
+
+
+
+
+
+//   const { query, price, category, shipping } = req.body;
+
+//   if (query) {
+
+//     console.log(searchValues, "<<------ searchvalues");
+//     await handleQuery(req, res, query);
+//   }
+
+//   // // price [20, 200]
+//   if (price !== undefined) {
+
+//     console.log("price ---> ", price);
+
+
+
+//     await handlePrice(req, res, price);
+//   }
+
+//   if (category) {
+//     console.log("category ---> ", category);
+
+//     await handleCategory(req, res, category);
+//   }
+
+//   if (shipping) {
+//     console.log("shipping ---> ", shipping);
+//     await handleShipping(req, res, shipping);
+//   }
+// };
 

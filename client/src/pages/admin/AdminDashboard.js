@@ -4,6 +4,7 @@ import { getOrders, changeStatus } from "../../functions/admin";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Orders from "../../components/order/Orders";
+import "./adminDashboard.css";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -28,6 +29,9 @@ const AdminDashboard = () => {
 
   return (
     <div className="container-fluid">
+              {/* <div className="col-md-2">
+          <AdminNav />
+        </div> */}
       <div className="row">
         <div className="col-md-2">
           <AdminNav />
@@ -35,7 +39,6 @@ const AdminDashboard = () => {
 
         <div className="col-md-10">
           <h4>Admin Dashboard</h4>
-          {/* {JSON.stringify(orders)} */}
           <Orders orders={orders} handleStatusChange={handleStatusChange} />
         </div>
       </div>
